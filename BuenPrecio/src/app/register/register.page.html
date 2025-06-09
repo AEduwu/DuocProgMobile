@@ -29,7 +29,7 @@
 
         <ion-item class="input-item">
           <ion-label position="floating">Confirmar contraseña</ion-label>
-          <ion-input [(ngModel)]="confirmPassword" type="confirmPassword"></ion-input>
+          <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
         </ion-item>
 
 <ion-item class="select-item">
@@ -54,10 +54,16 @@
   </ion-select>
 </ion-item>
 
+        <div *ngIf="errorMsg" style="color: red; margin-bottom: 10px;">
+          {{ errorMsg }}
+        </div>
+        <div *ngIf="successMsg" style="color: green; margin-bottom: 10px;">
+          {{ successMsg }}
+        </div>
 
-        <ion-button class="register-button">Ingresar</ion-button>
-        
-        <ion-button class="clean-button">Limpiar campos</ion-button>
+        <ion-button class="register-button" (click)="register()">Ingresar</ion-button>
+
+        <ion-button class="clean-button" (click)="clearFields()">Limpiar campos</ion-button>
 
   </ion-card-content>
 </ion-card>
