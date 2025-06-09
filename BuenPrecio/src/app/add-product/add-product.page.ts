@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-product',
@@ -7,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class AddProductPage {
-
   newProduct = {
     name: '',
     price: null,
@@ -17,10 +17,9 @@ export class AddProductPage {
   };
 
   selectedImageFile: File | null = null;
-
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor() {}
+  constructor(private alertController: AlertController) {}
 
   onImageSelected(event: any) {
     const file = event.target.files[0];
@@ -35,8 +34,39 @@ export class AddProductPage {
     }
   }
 
-  saveProduct() {
-    console.log('Product data:', this.newProduct);
-    console.log('Selected image file:', this.selectedImageFile);
+  async saveProduct() {
+    const { name, price, address, description } = this.newProduct;
+
+    if (!name || price === null || price === undefined || !address || !description || !this.selectedImageFile) {
+      await this.showAlert('Por favor, completa todos los campos e incluye una imagen.');
+      return;
+    }
+
+    if (price < 0) {
+      await this.showAlert('El precio no puede ser negativo.');
+      return;
+    }
+    
+    await this.showAlert('Oferta publicada ✅');
+
+    // Limpiar campos
+    this.newProduct = {
+      name: '',
+      price: null,
+      location: '',
+      description: '',
+      address: '',
+    };
+    this.selectedImageFile = null;
+    this.imagePreview = null;
+  }
+
+  async showAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Aviso',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }
